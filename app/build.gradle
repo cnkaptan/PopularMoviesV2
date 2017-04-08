@@ -13,6 +13,7 @@ android {
         versionName "$mainVersionName"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField("java.lang.String", "BASE_URL", '"http://api.themoviedb.org/3/"')
+        buildConfigField("java.lang.String", "THE_MOVIE_DB_API_KEY", '"aec6acb741640f4094e1822dd33f80d2"')
     }
 
     buildTypes {
