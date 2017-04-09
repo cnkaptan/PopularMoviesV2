@@ -19,6 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="com.cnkaptan.transferwisehomework"
+            android:name=".data.database.MoviesProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

@@ -3,9 +3,9 @@ package com.cnkaptan.transferwisehomework;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-import com.cnkaptan.transferwisehomework.data.api.ApiComponent;
-import com.cnkaptan.transferwisehomework.data.api.ApiModule;
-import com.cnkaptan.transferwisehomework.data.api.DaggerApiComponent;
+import com.cnkaptan.transferwisehomework.di.ApiComponent;
+import com.cnkaptan.transferwisehomework.di.ApiModule;
+import com.cnkaptan.transferwisehomework.di.DaggerApiComponent;
 
 /**
  * Created by cnkaptan on 08/04/2017.

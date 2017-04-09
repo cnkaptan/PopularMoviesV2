@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.data.api;
+package com.cnkaptan.transferwisehomework.di;
 
 import com.cnkaptan.transferwisehomework.AppModule;
 import com.cnkaptan.transferwisehomework.MainActivity;

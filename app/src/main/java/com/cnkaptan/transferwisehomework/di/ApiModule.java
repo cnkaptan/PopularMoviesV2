@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.data.api;
+package com.cnkaptan.transferwisehomework.di;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 
 import com.cnkaptan.transferwisehomework.AppModule;
 import com.cnkaptan.transferwisehomework.BuildConfig;
+import com.cnkaptan.transferwisehomework.data.api.AuthorizationInterceptor;
+import com.cnkaptan.transferwisehomework.data.api.MovieApi;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
