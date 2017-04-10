@@ -1,3 +1,51 @@
 <resources>
-    <string name="app_name">TransferWiseHomework</string>
+    <!-- App -->
+    <string name="app_name">Popular Movies App</string>
+
+    <!-- Actions (menu items, buttons, etc.) -->
+    <string name="action_settings">Settings</string>
+    <string name="action_sort">Sort by…</string>
+    <string name="action_cancel">Cancel</string>
+
+    <!-- Navigation drawer items -->
+    <string name="navigation_item_explore">Explore</string>
+    <string name="navigation_item_favorites">Favorites</string>
+
+    <!-- Movies grid screen -->
+    <string name="movies_grid_no_movies">No movies</string>
+
+    <!-- Favorites grid screen -->
+    <string name="favorites_grid_title">Favorites</string>
+
+    <!-- Movie detail screen -->
+    <string name="movie_detail_release_date">Release date: %s</string>
+    <string name="movie_detail_overview_title">Overview</string>
+    <string name="movie_detail_videos_title">Videos</string>
+    <string name="movie_detail_reviews_title">Reviews</string>
+
+    <!-- Sort dialog -->
+    <string name="sort_dialog_title">Sort by</string>
+    <string name="sort_dialog_most_popular">most popular</string>
+    <string name="sort_dialog_highest_rated">highest rated</string>
+    <string name="sort_dialog_most_rated">most rated</string>
+
+    <!-- Regular information messages -->
+    <string name="message_added_to_favorites">Added to favorites</string>
+    <string name="message_removed_from_favorites">Removed from favorites</string>
+
+    <!-- Error messages -->
+    <string name="error_failed_to_update_movies">Failed to update movies</string>
+
+    <!-- Content description -->
+    <string name="content_description_movie_poster">Movie poster image</string>
+    <string name="content_description_movie_backdrop">Movie backdrop image</string>
+    <string name="content_description_movie_video">Movie video thumbnail</string>
+    <string name="content_description_no_movies_icon">No movies icon</string>
+
+    <string name="favourites">Favourites</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="action_popular">Most Popular</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

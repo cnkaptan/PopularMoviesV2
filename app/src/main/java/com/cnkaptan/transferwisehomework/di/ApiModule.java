@@ -6,8 +6,10 @@ import android.support.annotation.Nullable;
 
 import com.cnkaptan.transferwisehomework.AppModule;
 import com.cnkaptan.transferwisehomework.BuildConfig;
+import com.cnkaptan.transferwisehomework.data.DataManager;
 import com.cnkaptan.transferwisehomework.data.api.AuthorizationInterceptor;
 import com.cnkaptan.transferwisehomework.data.api.MovieApi;
+import com.cnkaptan.transferwisehomework.data.database.realm.RealmDataSource;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -102,5 +104,18 @@ public class ApiModule {
     @Singleton
     MovieApi provideApi(Retrofit retrofit){
         return retrofit.create(MovieApi.class);
+    }
+
+    @Provides
+    @Singleton
+    RealmDataSource provideDataSource(@NonNull Context context){
+        return new RealmDataSource(context);
+
+    }
+
+    @Provides
+    @Singleton
+    DataManager provideDataManager(MovieApi movieApi, RealmDataSource realmDataSource){
+        return new DataManager(movieApi,realmDataSource);
     }
 }

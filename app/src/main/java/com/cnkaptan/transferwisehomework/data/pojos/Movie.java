@@ -5,13 +5,21 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by cnkaptan on 08/04/2017.
  */
 
-public class Movie implements Parcelable {
+public class Movie extends RealmObject implements Parcelable {
+
+    @PrimaryKey
+    @SerializedName("realm_id")
+    private String id;
+
     @SerializedName("id")
-    private long id;
+    private long movideId;
 
     @SerializedName("original_title")
     private String originalTitle;
@@ -40,12 +48,20 @@ public class Movie implements Parcelable {
     @SerializedName("backdrop_path")
     private String backdropPath;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public long getMovideId() {
+        return movideId;
+    }
+
+    public void setMovideId(long movideId) {
+        this.movideId = movideId;
     }
 
     public String getOriginalTitle() {
@@ -119,7 +135,10 @@ public class Movie implements Parcelable {
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
     }
-
+    @Override
+    public String toString() {
+        return "[" + this.movideId + ", " + this.title + "]";
+    }
     @Override
     @SuppressWarnings("PMD")
     public boolean equals(Object o) {
@@ -128,7 +147,7 @@ public class Movie implements Parcelable {
 
         Movie movie = (Movie) o;
 
-        if (id != movie.id) return false;
+        if (movideId != movie.movideId) return false;
         if (Double.compare(movie.popularity, popularity) != 0) return false;
         if (Double.compare(movie.averageVote, averageVote) != 0) return false;
         if (voteCount != movie.voteCount) return false;
@@ -147,7 +166,7 @@ public class Movie implements Parcelable {
     public int hashCode() {
         int result;
         long temp;
-        result = (int) (id ^ (id >>> 32));
+        result = (int) (movideId ^ (movideId >>> 32));
         result = 31 * result + (originalTitle != null ? originalTitle.hashCode() : 0);
         result = 31 * result + (overview != null ? overview.hashCode() : 0);
         result = 31 * result + (releaseDate != null ? releaseDate.hashCode() : 0);
@@ -169,7 +188,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.id);
+        dest.writeLong(this.movideId);
         dest.writeString(this.originalTitle);
         dest.writeString(this.overview);
         dest.writeString(this.releaseDate);
@@ -185,7 +204,7 @@ public class Movie implements Parcelable {
     }
 
     protected Movie(Parcel in) {
-        this.id = in.readLong();
+        this.movideId = in.readLong();
         this.originalTitle = in.readString();
         this.overview = in.readString();
         this.releaseDate = in.readString();

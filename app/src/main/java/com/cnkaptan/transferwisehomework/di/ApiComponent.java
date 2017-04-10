@@ -1,7 +1,8 @@
 package com.cnkaptan.transferwisehomework.di;
 
 import com.cnkaptan.transferwisehomework.AppModule;
-import com.cnkaptan.transferwisehomework.MainActivity;
+import com.cnkaptan.transferwisehomework.ui.grid.MoviesGridActivity;
+import com.cnkaptan.transferwisehomework.ui.grid.MoviesGridFragment;
 
 import javax.inject.Singleton;
 
@@ -13,5 +14,6 @@ import dagger.Component;
 @Singleton
 @Component(modules = {AppModule.class,ApiModule.class})
 public interface ApiComponent {
-    void inject(MainActivity mainActivity);
+    void inject(MoviesGridActivity mainActivity);
+    void inject(MoviesGridFragment mainActivity);
 }

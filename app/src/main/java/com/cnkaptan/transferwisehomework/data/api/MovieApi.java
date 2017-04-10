@@ -1,6 +1,6 @@
 package com.cnkaptan.transferwisehomework.data.api;
 
-import com.cnkaptan.transferwisehomework.data.pojos.DiscoverResponse;
+import com.cnkaptan.transferwisehomework.data.pojos.MovieResponse;
 import com.cnkaptan.transferwisehomework.data.pojos.Movie;
 import com.cnkaptan.transferwisehomework.data.pojos.ReviewResponse;
 import com.cnkaptan.transferwisehomework.data.pojos.TrailerResponse;
@@ -21,6 +21,6 @@ public interface MovieApi {
     @GET("movie/{id}/reviews")
     Observable<ReviewResponse> getMovieReviews(@Path("id") long movieId);
 
-    @GET("discover/movie")
-    Observable<DiscoverResponse<Movie>> discoverMovies(@Query("sort_by") String sortBy, @Query("page") Integer page);
+    @GET("movie/popular")
+    Observable<MovieResponse<Movie>> discoverMovies(@Query("page") Integer page);
 }

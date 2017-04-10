@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Locale;
+
 /**
  * Created by cnkaptan on 08/04/2017.
  */
@@ -166,4 +168,9 @@ public class Trailer implements Parcelable {
             return new Trailer[size];
         }
     };
+
+    public boolean isYoutubeVideo() {
+        return site.toLowerCase(Locale.US).equals(SITE_YOUTUBE.toLowerCase(Locale.US));
+    }
+
 }

@@ -8,7 +8,7 @@ import java.util.List;
  * Created by cnkaptan on 08/04/2017.
  */
 
-public class DiscoverResponse<T> {
+public class MovieResponse<T> {
     @SerializedName("page")
     private int page;
 
@@ -21,7 +21,7 @@ public class DiscoverResponse<T> {
     @SerializedName("total_results")
     private long totalResults;
 
-    public DiscoverResponse(int page, List<T> results, int totalPages, long totalResults) {
+    public MovieResponse(int page, List<T> results, int totalPages, long totalResults) {
         this.page = page;
         this.results = results;
         this.totalPages = totalPages;

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'realm-android'
+apply plugin: 'me.tatarka.retrolambda'
 def mainVersionName = "1.0.0"
 
 android {
@@ -15,7 +16,10 @@ android {
         buildConfigField("java.lang.String", "BASE_URL", '"http://api.themoviedb.org/3/"')
         buildConfigField("java.lang.String", "THE_MOVIE_DB_API_KEY", '"aec6acb741640f4094e1822dd33f80d2"')
     }
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -77,4 +81,6 @@ dependencies {
     //butterknife
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }
