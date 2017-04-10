@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.presenter;
+package com.cnkaptan.transferwisehomework.presenter.grid;
 
 import com.cnkaptan.transferwisehomework.MvpPresenter;
 import com.cnkaptan.transferwisehomework.MvpView;

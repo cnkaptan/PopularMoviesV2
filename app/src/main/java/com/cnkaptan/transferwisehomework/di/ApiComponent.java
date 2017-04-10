@@ -1,6 +1,7 @@
 package com.cnkaptan.transferwisehomework.di;
 
 import com.cnkaptan.transferwisehomework.AppModule;
+import com.cnkaptan.transferwisehomework.ui.detail.MovieDetailFragment;
 import com.cnkaptan.transferwisehomework.ui.grid.MoviesGridActivity;
 import com.cnkaptan.transferwisehomework.ui.grid.MoviesGridFragment;
 
@@ -16,4 +17,5 @@ import dagger.Component;
 public interface ApiComponent {
     void inject(MoviesGridActivity mainActivity);
     void inject(MoviesGridFragment mainActivity);
+    void inject(MovieDetailFragment movieDetailFragment);
 }

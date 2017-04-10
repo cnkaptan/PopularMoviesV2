@@ -13,7 +13,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,24 +22,31 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.cnkaptan.transferwisehomework.MovieApplication;
 import com.cnkaptan.transferwisehomework.R;
+import com.cnkaptan.transferwisehomework.data.api.MovieApi;
 import com.cnkaptan.transferwisehomework.data.pojos.Movie;
 import com.cnkaptan.transferwisehomework.data.pojos.Review;
 import com.cnkaptan.transferwisehomework.data.pojos.Trailer;
+import com.cnkaptan.transferwisehomework.presenter.detail.DetailContract;
+import com.cnkaptan.transferwisehomework.presenter.detail.DetailPresenter;
+import com.cnkaptan.transferwisehomework.utils.Constants;
 import com.cnkaptan.transferwisehomework.utils.ItemOffsetDecoration;
+import com.cnkaptan.transferwisehomework.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class MovieDetailFragment extends Fragment {
+public class MovieDetailFragment extends Fragment implements DetailContract.View{
     public static final String MOVIE = "movie";
-    private static final String POSTER_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/";
-    private static final String POSTER_IMAGE_SIZE = "w780";
 
     private static final String MOVIE_VIDEOS_KEY = "MovieVideos";
     private static final String MOVIE_REVIEWS_KEY = "MovieReviews";
@@ -77,6 +84,9 @@ public class MovieDetailFragment extends Fragment {
     private Movie movie;
     private MovieVideosAdapter videosAdapter;
     private MovieReviewsAdapter reviewsAdapter;
+    private DetailContract.Presenter presenter;
+    @Inject
+    MovieApi movieApi;
 
     public static MovieDetailFragment newInstance(Movie movie) {
         MovieDetailFragment fragment = new MovieDetailFragment();
@@ -94,12 +104,14 @@ public class MovieDetailFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
+        presenter.attachView(this);
         initViews();
         initVideosList();
         initReviewsList();
@@ -110,12 +122,15 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        ((MovieApplication)context.getApplicationContext()).getApiComponent().inject(this);
+        presenter = new DetailPresenter(movieApi);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        presenter.detachView();
+        presenter = null;
     }
 
 
@@ -147,7 +162,7 @@ public class MovieDetailFragment extends Fragment {
 
     private void initViews() {
         Glide.with(this)
-                .load(POSTER_IMAGE_BASE_URL + POSTER_IMAGE_SIZE + movie.getPosterPath())
+                .load(Constants.POSTER_IMAGE_BASE_URL + Constants.POSTER_IMAGE_SIZE + movie.getPosterPath())
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(movieImagePoster);
@@ -182,6 +197,7 @@ public class MovieDetailFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false);
         movieVideos.setLayoutManager(layoutManager);
+        presenter.getTrailersList(movie.getMovideId());
     }
 
     private void initReviewsList() {
@@ -191,6 +207,7 @@ public class MovieDetailFragment extends Fragment {
         movieReviews.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         movieReviews.setLayoutManager(layoutManager);
+        presenter.getReviewsList(movie.getMovideId());
     }
 
     private void onMovieReviewClicked(int position) {
@@ -219,11 +236,23 @@ public class MovieDetailFragment extends Fragment {
 
     private void setupCardElevation(View view) {
         ViewCompat.setElevation(view,
-                convertDpToPixel(getResources().getInteger(R.integer.movie_detail_content_elevation_in_dp)));
+                Utils.convertDpToPixel(getResources().getInteger(R.integer.movie_detail_content_elevation_in_dp),getContext().getResources()));
     }
 
-    public float convertDpToPixel(float dp) {
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+
+    @Override
+    public void initTrailersData(List<Trailer> trailers) {
+        videosAdapter.setMovieVideos(trailers);
+    }
+
+    @Override
+    public void initReviewsData(List<Review> reviews) {
+        reviewsAdapter.setMovieReviews(reviews);
+    }
+
+    @Override
+    public void showError(String message) {
+        Log.e(LOG_TAG,message);
+        // TODO: Add Dialog
     }
 }

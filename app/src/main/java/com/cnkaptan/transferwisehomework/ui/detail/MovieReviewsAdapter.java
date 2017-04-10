@@ -29,7 +29,7 @@ public class MovieReviewsAdapter extends RecyclerView.Adapter<MovieReviewsAdapte
         movieReviews = new ArrayList<>();
     }
 
-    public void setMovieReviews(@Nullable ArrayList<Review> movieReviews) {
+    public void setMovieReviews(@Nullable List<Review> movieReviews) {
         this.movieReviews = movieReviews;
         notifyDataSetChanged();
     }
