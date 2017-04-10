@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cnkaptan.transferwisehomework.MovieApplication;
 import com.cnkaptan.transferwisehomework.R;
-import com.cnkaptan.transferwisehomework.data.api.MovieApi;
+import com.cnkaptan.transferwisehomework.data.DataManager;
 import com.cnkaptan.transferwisehomework.data.pojos.Movie;
 import com.cnkaptan.transferwisehomework.data.pojos.Review;
 import com.cnkaptan.transferwisehomework.data.pojos.Trailer;
@@ -86,7 +87,7 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
     private MovieReviewsAdapter reviewsAdapter;
     private DetailContract.Presenter presenter;
     @Inject
-    MovieApi movieApi;
+    DataManager dataManager;
 
     public static MovieDetailFragment newInstance(Movie movie) {
         MovieDetailFragment fragment = new MovieDetailFragment();
@@ -123,7 +124,7 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
     public void onAttach(Context context) {
         super.onAttach(context);
         ((MovieApplication)context.getApplicationContext()).getApiComponent().inject(this);
-        presenter = new DetailPresenter(movieApi);
+        presenter = new DetailPresenter(dataManager);
     }
 
     @Override
@@ -253,6 +254,12 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
     @Override
     public void showError(String message) {
         Log.e(LOG_TAG,message);
-        // TODO: Add Dialog
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setTitle(R.string.error)
+                .setMessage(message)
+                .setPositiveButton(R.string.okey, (dialog1, which) -> dialog1.dismiss())
+                .setCancelable(false)
+                .create();
+        dialog.show();
     }
 }

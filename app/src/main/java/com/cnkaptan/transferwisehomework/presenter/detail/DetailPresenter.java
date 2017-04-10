@@ -1,9 +1,11 @@
 package com.cnkaptan.transferwisehomework.presenter.detail;
 
 import com.cnkaptan.transferwisehomework.BasePresenter;
-import com.cnkaptan.transferwisehomework.data.api.MovieApi;
-import com.cnkaptan.transferwisehomework.data.pojos.ReviewResponse;
-import com.cnkaptan.transferwisehomework.data.pojos.TrailerResponse;
+import com.cnkaptan.transferwisehomework.data.DataManager;
+import com.cnkaptan.transferwisehomework.data.pojos.Review;
+import com.cnkaptan.transferwisehomework.data.pojos.Trailer;
+
+import java.util.List;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -14,19 +16,19 @@ import rx.schedulers.Schedulers;
  */
 
 public class DetailPresenter extends BasePresenter<DetailContract.View> implements DetailContract.Presenter {
-    //TODO datamanagerden alip , cachleyebilirsin
-    private MovieApi movieApi;
+    //TODO datamanagerden alip , cachleyebilirsin Review ve Trailer icin
+    private DataManager dataManager;
 
-    public DetailPresenter(MovieApi movieApi) {
-        this.movieApi = movieApi;
+    public DetailPresenter(DataManager dataManager) {
+        this.dataManager = dataManager;
     }
 
     @Override
     public void getTrailersList(long movieId) {
-        addSubscription(movieApi.getMovieVideos(movieId)
+        addSubscription(dataManager.getMovieVideos(movieId)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Subscriber<TrailerResponse>() {
+        .subscribe(new Subscriber<List<Trailer>>() {
             @Override
             public void onCompleted() {
 
@@ -38,18 +40,18 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
             }
 
             @Override
-            public void onNext(TrailerResponse trailerResponse) {
-                getView().initTrailersData(trailerResponse.getResults());
+            public void onNext(List<Trailer> trailers) {
+                getView().initTrailersData(trailers);
             }
         }));
     }
 
     @Override
     public void getReviewsList(long movieId) {
-        addSubscription(movieApi.getMovieReviews(movieId)
+        addSubscription(dataManager.getMovieReviews(movieId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ReviewResponse>() {
+                .subscribe(new Subscriber<List<Review>>() {
                     @Override
                     public void onCompleted() {
 
@@ -61,8 +63,8 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
                     }
 
                     @Override
-                    public void onNext(ReviewResponse reviewResponse) {
-                        getView().initReviewsData(reviewResponse.getResults());
+                    public void onNext(List<Review> reviews) {
+                        getView().initReviewsData(reviews);
                     }
                 }));
     }

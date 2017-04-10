@@ -8,16 +8,24 @@ import com.cnkaptan.transferwisehomework.data.api.MovieApi;
 import com.cnkaptan.transferwisehomework.data.database.realm.RealmDataSource;
 import com.cnkaptan.transferwisehomework.data.pojos.Movie;
 import com.cnkaptan.transferwisehomework.data.pojos.MovieResponse;
+import com.cnkaptan.transferwisehomework.data.pojos.Review;
+import com.cnkaptan.transferwisehomework.data.pojos.ReviewResponse;
+import com.cnkaptan.transferwisehomework.data.pojos.Trailer;
+import com.cnkaptan.transferwisehomework.data.pojos.TrailerResponse;
 
+import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Singleton;
+
 import rx.Observable;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by cnkaptan on 09/04/2017.
  */
-
+@Singleton
 public class DataManager {
 
     private static final String TAG = DataManager.class.getSimpleName();
@@ -27,9 +35,15 @@ public class DataManager {
     @NonNull
     private final RealmDataSource realmDataSource;
 
+    private final HashMap<Long, List<Trailer>> trailerCache;
+    private final HashMap<Long, List<Review>> reviewCache;
+
+
     public DataManager(@NonNull MovieApi movieApi, @NonNull RealmDataSource realmDataSource) {
         this.movieApi = movieApi;
         this.realmDataSource = realmDataSource;
+        this.trailerCache = new HashMap<>();
+        this.reviewCache = new HashMap<>();
     }
 
     public Observable<List<Movie>> loadMoreMovies() {
@@ -37,7 +51,7 @@ public class DataManager {
         return getMovies(page);
     }
 
-    public Observable<List<Movie>> getMovies(@Nullable Integer page){
+    public Observable<List<Movie>> getMovies(@Nullable Integer page) {
         Observable<Movie> movieObservable = movieApi.discoverMovies(page)
                 .subscribeOn(Schedulers.io())
                 .doOnNext((movieDiscoverResponse) -> clearMoviesSortTableIfNeeded(movieDiscoverResponse))
@@ -50,7 +64,7 @@ public class DataManager {
     }
 
     private void clearMoviesSortTableIfNeeded(MovieResponse<Movie> movieDiscoverResponse) {
-        if (movieDiscoverResponse.getPage() == 1){
+        if (movieDiscoverResponse.getPage() == 1) {
             realmDataSource.clearMovies();
         }
     }
@@ -61,10 +75,32 @@ public class DataManager {
     }
 
 
-    public Observable<List<Movie>> getDatasFromLocal(){
-        return Observable.concat(realmDataSource.getAllMovies().toList(),getMovies(null))
-                .filter(movies -> movies != null && movies.size()>0).first();
+    public Observable<List<Movie>> getDatasFromLocal() {
+        return Observable.concat(realmDataSource.getAllMovies().toList(), getMovies(null))
+                .filter(movies -> movies != null && movies.size() > 0).first();
     }
 
 
+    public Observable<List<Trailer>> getMovieVideos(long movieId) {
+        List<Trailer> videos = trailerCache.get(movieId);
+        if (videos != null){
+            return Observable.from(videos).toList();
+        }
+        return movieApi.getMovieVideos(movieId)
+                .subscribeOn(Schedulers.io())
+                .map((Func1<TrailerResponse, List<Trailer>>) TrailerResponse::getResults)
+                .doOnNext(trailers -> trailerCache.put(movieId, trailers));
+
+    }
+
+    public Observable<List<Review>> getMovieReviews(long movieId) {
+        List<Review> cachedReview = reviewCache.get(movieId);
+        if (cachedReview != null){
+            return Observable.from(cachedReview).toList();
+        }
+        return movieApi.getMovieReviews(movieId)
+                .subscribeOn(Schedulers.io())
+                .map((Func1<ReviewResponse, List<Review>>) ReviewResponse::getResults)
+                .doOnNext(reviews -> reviewCache.put(movieId, reviews));
+    }
 }
