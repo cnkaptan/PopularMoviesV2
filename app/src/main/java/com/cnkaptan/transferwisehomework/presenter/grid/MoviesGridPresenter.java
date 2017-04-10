@@ -78,6 +78,7 @@ public class MoviesGridPresenter extends BasePresenter<MoviesGridFragmentContrac
 
     @Override
     public void loadMoreMovies() {
+        getView().showRefresh();
         addSubscription(dataManager.loadMoreMovies().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Movie>>() {
