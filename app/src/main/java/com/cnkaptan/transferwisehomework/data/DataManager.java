@@ -32,12 +32,12 @@ public class DataManager {
         this.realmDataSource = realmDataSource;
     }
 
-    public void loadMoreMovies() {
+    public Observable<List<Movie>> loadMoreMovies() {
         int page = realmDataSource.getCurrentPage();
-        getMovies(page);
+        return getMovies(page);
     }
 
-    public Observable<Movie> getMovies(@Nullable Integer page){
+    public Observable<List<Movie>> getMovies(@Nullable Integer page){
         Observable<Movie> movieObservable = movieApi.discoverMovies(page)
                 .subscribeOn(Schedulers.io())
                 .doOnNext((movieDiscoverResponse) -> clearMoviesSortTableIfNeeded(movieDiscoverResponse))
@@ -46,7 +46,7 @@ public class DataManager {
                 .flatMap(movies -> Observable.from(movies))
                 .doOnNext(movie -> realmDataSource.saveMovie(movie));
 
-        return movieObservable;
+        return movieObservable.toList();
     }
 
     private void clearMoviesSortTableIfNeeded(MovieResponse<Movie> movieDiscoverResponse) {

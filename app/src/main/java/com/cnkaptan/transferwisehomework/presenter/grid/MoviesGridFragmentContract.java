@@ -15,10 +15,14 @@ public interface MoviesGridFragmentContract {
     interface View extends MvpView{
         void initDatas(List<Movie> movies);
         void onError(String message);
-
+        void hideRefresh();
+        void showRefresh();
+        void addNewMovies(List<Movie> movies);
     }
 
     interface Presenter extends MvpPresenter<View>{
         void getDatasFromLocal();
+        void refreshMovies();
+        void loadMoreMovies();
     }
 }

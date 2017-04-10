@@ -14,6 +14,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class DetailPresenter extends BasePresenter<DetailContract.View> implements DetailContract.Presenter {
+    //TODO datamanagerden alip , cachleyebilirsin
     private MovieApi movieApi;
 
     public DetailPresenter(MovieApi movieApi) {

@@ -4,6 +4,7 @@ package com.cnkaptan.transferwisehomework.ui.grid;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.cnkaptan.transferwisehomework.data.DataManager;
 import com.cnkaptan.transferwisehomework.data.pojos.Movie;
 import com.cnkaptan.transferwisehomework.presenter.grid.MoviesGridFragmentContract;
 import com.cnkaptan.transferwisehomework.presenter.grid.MoviesGridPresenter;
+import com.cnkaptan.transferwisehomework.utils.EndlessRecyclerViewOnScrollListener;
 import com.cnkaptan.transferwisehomework.utils.ItemOffsetDecoration;
 import com.cnkaptan.transferwisehomework.utils.OnItemClickListener;
 import com.cnkaptan.transferwisehomework.utils.OnItemSelectedListener;
@@ -32,7 +34,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MoviesGridFragment extends Fragment implements OnItemClickListener,MoviesGridFragmentContract.View{
+public class MoviesGridFragment extends Fragment implements OnItemClickListener, MoviesGridFragmentContract.View
+        , SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = MoviesGridFragment.class.getSimpleName();
     @BindView(R.id.movies_grid)
@@ -47,7 +50,11 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
     @Inject
     DataManager dataManager;
     MoviesGridFragmentContract.Presenter presenter;
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout swipeLayout;
     private OnItemSelectedListener onItemSelectedListener;
+    private EndlessRecyclerViewOnScrollListener endlessRecyclerViewOnScrollListener;
+    private GridLayoutManager gridLayoutManager;
 
     public static MoviesGridFragment newInstance() {
         MoviesGridFragment fragment = new MoviesGridFragment();
@@ -81,8 +88,9 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movies_grid, container, false);
         unbinder = ButterKnife.bind(this, view);
-        ((MovieApplication)getActivity().getApplicationContext()).getApiComponent().inject(this);
+        ((MovieApplication) getActivity().getApplicationContext()).getApiComponent().inject(this);
         initMoviesGrid();
+        initSwipeRefreshLayout();
         presenter = new MoviesGridPresenter(dataManager);
         presenter.attachView(this);
         presenter.getDatasFromLocal();
@@ -103,10 +111,27 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
         moviesGrid.setItemAnimator(new DefaultItemAnimator());
         int columns = getResources().getInteger(R.integer.movies_columns);
         moviesGrid.addItemDecoration(new ItemOffsetDecoration(getActivity(), R.dimen.movie_item_offset));
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), columns);
+        gridLayoutManager = new GridLayoutManager(getActivity(), columns);
         moviesGrid.setLayoutManager(gridLayoutManager);
+        onMoviesGridInitialisationFinished();
     }
 
+    private void initSwipeRefreshLayout() {
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeResources(R.color.primary_material_dark,
+                R.color.accent_material_light);
+    }
+
+
+    private void onMoviesGridInitialisationFinished() {
+        endlessRecyclerViewOnScrollListener = new EndlessRecyclerViewOnScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore() {
+                presenter.loadMoreMovies();
+            }
+        };
+        moviesGrid.addOnScrollListener(endlessRecyclerViewOnScrollListener);
+    }
 
     @Override
     public void onItemClick(View itemView, int position) {
@@ -123,6 +148,28 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
 
     @Override
     public void onError(String message) {
-        Log.e(TAG,message);
+        Log.e(TAG, message);
+    }
+
+    @Override
+    public void hideRefresh() {
+        swipeLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showRefresh() {
+        swipeLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void addNewMovies(List<Movie> movies) {
+        adapter.addDatas(movies);
+        endlessRecyclerViewOnScrollListener.setLoading(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeLayout.setRefreshing(true);
+        presenter.refreshMovies();
     }
 }
