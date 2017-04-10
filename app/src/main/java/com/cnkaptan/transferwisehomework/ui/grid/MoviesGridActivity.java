@@ -10,10 +10,10 @@ import android.widget.FrameLayout;
 import android.widget.ScrollView;
 
 import com.cnkaptan.transferwisehomework.R;
-import com.cnkaptan.transferwisehomework.data.pojos.Movie;
+import com.cnkaptan.transferwisehomework.data.Movie;
 import com.cnkaptan.transferwisehomework.ui.detail.MovieDetailActivity;
 import com.cnkaptan.transferwisehomework.ui.detail.MovieDetailFragment;
-import com.cnkaptan.transferwisehomework.utils.OnItemSelectedListener;
+import com.cnkaptan.transferwisehomework.util.OnItemSelectedListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

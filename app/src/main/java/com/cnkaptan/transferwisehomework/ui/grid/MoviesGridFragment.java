@@ -10,7 +10,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +19,14 @@ import android.widget.RelativeLayout;
 import com.cnkaptan.transferwisehomework.MovieApplication;
 import com.cnkaptan.transferwisehomework.R;
 import com.cnkaptan.transferwisehomework.data.DataManager;
-import com.cnkaptan.transferwisehomework.data.pojos.Movie;
+import com.cnkaptan.transferwisehomework.data.Movie;
 import com.cnkaptan.transferwisehomework.presenter.grid.MoviesGridFragmentContract;
 import com.cnkaptan.transferwisehomework.presenter.grid.MoviesGridPresenter;
-import com.cnkaptan.transferwisehomework.utils.EndlessRecyclerViewOnScrollListener;
-import com.cnkaptan.transferwisehomework.utils.ItemOffsetDecoration;
-import com.cnkaptan.transferwisehomework.utils.OnItemClickListener;
-import com.cnkaptan.transferwisehomework.utils.OnItemSelectedListener;
-import com.cnkaptan.transferwisehomework.utils.Utils;
+import com.cnkaptan.transferwisehomework.util.EndlessRecyclerViewOnScrollListener;
+import com.cnkaptan.transferwisehomework.util.ItemOffsetDecoration;
+import com.cnkaptan.transferwisehomework.util.OnItemClickListener;
+import com.cnkaptan.transferwisehomework.util.OnItemSelectedListener;
+import com.cnkaptan.transferwisehomework.util.Utils;
 
 import java.util.List;
 
@@ -137,7 +136,6 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
         endlessRecyclerViewOnScrollListener = new EndlessRecyclerViewOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore() {
-                Log.e(TAG,"onLoadMore");
                 presenter.loadMoreMovies();
             }
         };
@@ -166,21 +164,30 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
     }
 
     @Override
-    public void hideRefresh() {
+    public void showLoading() {
+        dialog = Utils.showLoading(getContext());
+    }
+
+    @Override
+    public void hideLoading() {
         if (dialog != null && dialog.isShowing()){
             dialog.dismiss();
         }
+    }
+
+    @Override
+    public void hideRefresh() {
+        swipeLayout.setRefreshing(false);
 
     }
 
     @Override
     public void showRefresh() {
-        dialog = Utils.showLoading(getContext());
+        swipeLayout.setRefreshing(true);
     }
 
     @Override
     public void addNewMovies(List<Movie> movies) {
-        Log.e(TAG,"add New Movies onLoadMore");
         adapter.addDatas(movies);
         endlessRecyclerViewOnScrollListener.setLoading(false);
         updateGridLayout();

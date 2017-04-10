@@ -1,6 +1,6 @@
 package com.cnkaptan.transferwisehomework.data.database;
 
-import com.cnkaptan.transferwisehomework.data.pojos.Movie;
+import com.cnkaptan.transferwisehomework.data.Movie;
 
 import rx.Observable;
 

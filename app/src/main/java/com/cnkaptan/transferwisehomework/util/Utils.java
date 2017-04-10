@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.utils;
+package com.cnkaptan.transferwisehomework.util;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,7 +16,7 @@ import com.cnkaptan.transferwisehomework.R;
 
 public final class Utils {
     private Utils(){
-
+        // Empty private Constructor
     }
 
     public static float convertDpToPixel(float dp, Resources resources) {

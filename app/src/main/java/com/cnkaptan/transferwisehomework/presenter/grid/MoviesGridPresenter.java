@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.cnkaptan.transferwisehomework.BasePresenter;
 import com.cnkaptan.transferwisehomework.data.DataManager;
-import com.cnkaptan.transferwisehomework.data.pojos.Movie;
+import com.cnkaptan.transferwisehomework.data.Movie;
 
 import java.util.List;
 
@@ -78,7 +78,7 @@ public class MoviesGridPresenter extends BasePresenter<MoviesGridFragmentContrac
 
     @Override
     public void loadMoreMovies() {
-        getView().showRefresh();
+        getView().showLoading();
         addSubscription(dataManager.loadMoreMovies().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Movie>>() {
@@ -90,13 +90,13 @@ public class MoviesGridPresenter extends BasePresenter<MoviesGridFragmentContrac
                     @Override
                     public void onError(Throwable e) {
                         getView().onError(e.getMessage());
-                        getView().hideRefresh();
+                        getView().hideLoading();
                     }
 
                     @Override
                     public void onNext(List<Movie> movies) {
                         getView().addNewMovies(movies);
-                        getView().hideRefresh();
+                        getView().hideLoading();
                     }
                 }));
     }

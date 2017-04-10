@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.data.pojos;
+package com.cnkaptan.transferwisehomework.data;
 
 import com.google.gson.annotations.SerializedName;
 

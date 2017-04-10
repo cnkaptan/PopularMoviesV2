@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.utils;
+package com.cnkaptan.transferwisehomework.util;
 
 /**
  * Created by cnkaptan on 10/04/2017.

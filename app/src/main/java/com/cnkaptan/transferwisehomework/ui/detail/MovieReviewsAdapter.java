@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cnkaptan.transferwisehomework.R;
-import com.cnkaptan.transferwisehomework.data.pojos.Review;
-import com.cnkaptan.transferwisehomework.utils.OnItemClickListener;
+import com.cnkaptan.transferwisehomework.data.Review;
+import com.cnkaptan.transferwisehomework.util.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;

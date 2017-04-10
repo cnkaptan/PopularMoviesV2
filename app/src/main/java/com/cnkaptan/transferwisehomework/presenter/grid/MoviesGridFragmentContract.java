@@ -2,7 +2,7 @@ package com.cnkaptan.transferwisehomework.presenter.grid;
 
 import com.cnkaptan.transferwisehomework.MvpPresenter;
 import com.cnkaptan.transferwisehomework.MvpView;
-import com.cnkaptan.transferwisehomework.data.pojos.Movie;
+import com.cnkaptan.transferwisehomework.data.Movie;
 
 import java.util.List;
 
@@ -15,6 +15,8 @@ public interface MoviesGridFragmentContract {
     interface View extends MvpView{
         void initDatas(List<Movie> movies);
         void onError(String message);
+        void showLoading();
+        void hideLoading();
         void hideRefresh();
         void showRefresh();
         void addNewMovies(List<Movie> movies);

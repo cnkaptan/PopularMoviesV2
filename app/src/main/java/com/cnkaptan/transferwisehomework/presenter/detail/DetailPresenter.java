@@ -1,9 +1,11 @@
 package com.cnkaptan.transferwisehomework.presenter.detail;
 
+import android.support.annotation.NonNull;
+
 import com.cnkaptan.transferwisehomework.BasePresenter;
 import com.cnkaptan.transferwisehomework.data.DataManager;
-import com.cnkaptan.transferwisehomework.data.pojos.Review;
-import com.cnkaptan.transferwisehomework.data.pojos.Trailer;
+import com.cnkaptan.transferwisehomework.data.Review;
+import com.cnkaptan.transferwisehomework.data.Trailer;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class DetailPresenter extends BasePresenter<DetailContract.View> implements DetailContract.Presenter {
+    @NonNull
     private DataManager mDatamanager;
 
     public DetailPresenter(DataManager dataManager) {

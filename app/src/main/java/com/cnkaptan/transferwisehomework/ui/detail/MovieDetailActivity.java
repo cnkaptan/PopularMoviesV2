@@ -17,9 +17,9 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cnkaptan.transferwisehomework.R;
-import com.cnkaptan.transferwisehomework.data.pojos.Movie;
-import com.cnkaptan.transferwisehomework.utils.Constants;
-import com.cnkaptan.transferwisehomework.utils.Utils;
+import com.cnkaptan.transferwisehomework.data.Movie;
+import com.cnkaptan.transferwisehomework.util.Constants;
+import com.cnkaptan.transferwisehomework.util.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

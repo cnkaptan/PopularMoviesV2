@@ -2,8 +2,8 @@ package com.cnkaptan.transferwisehomework.presenter.detail;
 
 import com.cnkaptan.transferwisehomework.MvpPresenter;
 import com.cnkaptan.transferwisehomework.MvpView;
-import com.cnkaptan.transferwisehomework.data.pojos.Review;
-import com.cnkaptan.transferwisehomework.data.pojos.Trailer;
+import com.cnkaptan.transferwisehomework.data.Review;
+import com.cnkaptan.transferwisehomework.data.Trailer;
 
 import java.util.List;
 

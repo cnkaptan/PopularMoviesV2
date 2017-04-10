@@ -2,18 +2,12 @@ package com.cnkaptan.transferwisehomework.data;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.cnkaptan.transferwisehomework.data.api.MovieApi;
 import com.cnkaptan.transferwisehomework.data.database.realm.RealmDataSource;
-import com.cnkaptan.transferwisehomework.data.pojos.Movie;
-import com.cnkaptan.transferwisehomework.data.pojos.MovieResponse;
-import com.cnkaptan.transferwisehomework.data.pojos.Review;
-import com.cnkaptan.transferwisehomework.data.pojos.ReviewResponse;
-import com.cnkaptan.transferwisehomework.data.pojos.Trailer;
-import com.cnkaptan.transferwisehomework.data.pojos.TrailerResponse;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -28,6 +22,7 @@ import rx.schedulers.Schedulers;
 @Singleton
 public class DataManager {
 
+
     private static final String TAG = DataManager.class.getSimpleName();
     @NonNull
     private final MovieApi movieApi;
@@ -35,19 +30,19 @@ public class DataManager {
     @NonNull
     private final RealmDataSource realmDataSource;
 
-    private final HashMap<Long, List<Trailer>> trailerCache;
-    private final HashMap<Long, List<Review>> reviewCache;
+    private final ArrayMap<Long, List<Trailer>> trailerCache;
+    private final ArrayMap<Long, List<Review>> reviewCache;
 
 
     public DataManager(@NonNull MovieApi movieApi, @NonNull RealmDataSource realmDataSource) {
         this.movieApi = movieApi;
         this.realmDataSource = realmDataSource;
-        this.trailerCache = new HashMap<>();
-        this.reviewCache = new HashMap<>();
+        this.trailerCache = new ArrayMap<>();
+        this.reviewCache = new ArrayMap<>();
     }
 
     public Observable<List<Movie>> loadMoreMovies() {
-        int page = realmDataSource.getCurrentPage();
+        final int page = realmDataSource.getCurrentPage();
         return getMovies(page);
     }
 
@@ -82,7 +77,7 @@ public class DataManager {
 
 
     public Observable<List<Trailer>> getMovieVideos(long movieId) {
-        List<Trailer> videos = trailerCache.get(movieId);
+        final List<Trailer> videos = trailerCache.get(movieId);
         if (videos != null){
             return Observable.from(videos).toList();
         }
@@ -94,7 +89,7 @@ public class DataManager {
     }
 
     public Observable<List<Review>> getMovieReviews(long movieId) {
-        List<Review> cachedReview = reviewCache.get(movieId);
+        final List<Review> cachedReview = reviewCache.get(movieId);
         if (cachedReview != null){
             return Observable.from(cachedReview).toList();
         }

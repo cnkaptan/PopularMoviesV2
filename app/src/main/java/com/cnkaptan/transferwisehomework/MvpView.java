@@ -6,5 +6,5 @@ package com.cnkaptan.transferwisehomework;
 
 
 public interface MvpView {
-
+    // Marker Interface
 }

@@ -14,7 +14,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,14 +25,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cnkaptan.transferwisehomework.MovieApplication;
 import com.cnkaptan.transferwisehomework.R;
 import com.cnkaptan.transferwisehomework.data.DataManager;
-import com.cnkaptan.transferwisehomework.data.pojos.Movie;
-import com.cnkaptan.transferwisehomework.data.pojos.Review;
-import com.cnkaptan.transferwisehomework.data.pojos.Trailer;
+import com.cnkaptan.transferwisehomework.data.Movie;
+import com.cnkaptan.transferwisehomework.data.Review;
+import com.cnkaptan.transferwisehomework.data.Trailer;
 import com.cnkaptan.transferwisehomework.presenter.detail.DetailContract;
 import com.cnkaptan.transferwisehomework.presenter.detail.DetailPresenter;
-import com.cnkaptan.transferwisehomework.utils.Constants;
-import com.cnkaptan.transferwisehomework.utils.ItemOffsetDecoration;
-import com.cnkaptan.transferwisehomework.utils.Utils;
+import com.cnkaptan.transferwisehomework.util.Constants;
+import com.cnkaptan.transferwisehomework.util.ItemOffsetDecoration;
+import com.cnkaptan.transferwisehomework.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -253,7 +252,6 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
 
     @Override
     public void showError(String message) {
-        Log.e(LOG_TAG,message);
         AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setTitle(R.string.error)
                 .setMessage(message)

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.cnkaptan.transferwisehomework.data.database.DataSource;
-import com.cnkaptan.transferwisehomework.data.pojos.Movie;
+import com.cnkaptan.transferwisehomework.data.Movie;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +27,7 @@ public final class RealmDataSource implements DataSource {
     private RealmConfiguration mRealmConfiguration;
     private static final int PAGE_SIZE = 20;
     private RealmDataSource(){
-
+        // Empty private Constructor
     }
 
     public RealmDataSource(@NonNull Context context) {

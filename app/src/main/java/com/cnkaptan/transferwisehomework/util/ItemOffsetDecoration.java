@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.utils;
+package com.cnkaptan.transferwisehomework.util;
 
 import android.content.Context;
 import android.graphics.Rect;

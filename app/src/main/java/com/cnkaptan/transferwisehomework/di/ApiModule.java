@@ -50,7 +50,7 @@ public class ApiModule {
     @Provides
     @Singleton
     @Named(LOG_HTTP_CLIENT)
-    OkHttpClient provideLogOkHttpClient(Context context) {
+    OkHttpClient provideLogOkHttpClient(@NonNull Context context) {
         final OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
             final HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -74,7 +74,7 @@ public class ApiModule {
     @Provides
     @Singleton
     @Named(NORMAL_HTTP_CLIENT)
-    OkHttpClient provideOkHttpClient(Context context) {
+    OkHttpClient provideOkHttpClient(@Nullable Context context) {
         final OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         okHttpClientBuilder
                 .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
@@ -91,6 +91,7 @@ public class ApiModule {
 
     @Provides
     @Singleton
+    @NonNull
     Retrofit provideRetrofit(@NonNull String baseUrl, @Named(LOG_HTTP_CLIENT) OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
