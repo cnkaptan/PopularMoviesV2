@@ -15,7 +15,6 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by cnkaptan on 09/04/2017.
@@ -61,27 +60,6 @@ public final class RealmDataSource implements DataSource {
     }
 
     @Override
-    public Observable<Movie> search(final long id) {
-        return Observable.create(new Observable.OnSubscribe<Movie>() {
-            @Override
-            public void call(Subscriber<? super Movie> subscriber) {
-                final Realm realm = Realm.getInstance(mRealmConfiguration);
-                final Movie realmMovie = realm.where(Movie.class)
-                        .equalTo("id",id)
-                        .findFirst();
-
-                if (realmMovie != null && realmMovie.isLoaded() && realmMovie.isValid()){
-                    subscriber.onNext(realm.copyFromRealm(realmMovie));
-                }else{
-                    Observable.empty();
-                }
-                realm.close();
-                subscriber.onCompleted();
-            }
-        });
-    }
-
-    @Override
     public Observable<Movie> getAllMovies() {
         final Realm realm = Realm.getInstance(mRealmConfiguration);
         final RealmResults<Movie> realmResults = realm.where(Movie.class)
@@ -103,12 +81,13 @@ public final class RealmDataSource implements DataSource {
         return currentPage;
     }
 
+
+    @Override
     public void clearMovies() {
         final Realm realm = Realm.getInstance(mRealmConfiguration);
         realm.beginTransaction();
         RealmResults<Movie> result = realm.where(Movie.class).findAll();
         result.deleteAllFromRealm();
-//        realm.delete(Movie.class);
         realm.commitTransaction();
         realm.close();
     }

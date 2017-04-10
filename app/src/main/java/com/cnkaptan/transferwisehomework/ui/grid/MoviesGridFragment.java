@@ -3,12 +3,12 @@ package com.cnkaptan.transferwisehomework.ui.grid;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +98,12 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateGridLayout();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
@@ -143,12 +149,15 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
     @Override
     public void initDatas(List<Movie> movies) {
         adapter.setDatas(movies);
+        updateGridLayout();
 
     }
 
     @Override
     public void onError(String message) {
-        Log.e(TAG, message);
+        Snackbar.make(swipeLayout, R.string.error_failed_to_update_movies,
+                Snackbar.LENGTH_LONG)
+                .show();
     }
 
     @Override
@@ -165,6 +174,7 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
     public void addNewMovies(List<Movie> movies) {
         adapter.addDatas(movies);
         endlessRecyclerViewOnScrollListener.setLoading(false);
+        updateGridLayout();
     }
 
     @Override
@@ -172,4 +182,15 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
         swipeLayout.setRefreshing(true);
         presenter.refreshMovies();
     }
+
+    protected void updateGridLayout() {
+        if (adapter.getItemCount() == 0) {
+            moviesGrid.setVisibility(View.GONE);
+            viewNoMovies.setVisibility(View.VISIBLE);
+        } else {
+            moviesGrid.setVisibility(View.VISIBLE);
+            viewNoMovies.setVisibility(View.GONE);
+        }
+    }
+
 }

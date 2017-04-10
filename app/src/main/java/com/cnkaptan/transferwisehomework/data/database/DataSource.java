@@ -12,7 +12,7 @@ public interface DataSource {
 
     void saveMovie(Movie movie);
 
-    Observable<Movie> search(final long id);
-
     Observable<Movie> getAllMovies();
+
+    void clearMovies();
 }
