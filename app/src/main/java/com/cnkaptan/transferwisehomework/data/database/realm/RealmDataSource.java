@@ -54,7 +54,7 @@ public final class RealmDataSource implements DataSource {
             realmMovie.setAverageVote(movie.getAverageVote());
             realmMovie.setVoteCount(movie.getVoteCount());
             realmMovie.setBackdropPath(movie.getBackdropPath());
-            transactionRealm.copyToRealmOrUpdate(realmMovie);
+            transactionRealm.insertOrUpdate(realmMovie);
         });
         realm.close();
     }
@@ -81,14 +81,13 @@ public final class RealmDataSource implements DataSource {
         return currentPage;
     }
 
-
     @Override
     public void clearMovies() {
         final Realm realm = Realm.getInstance(mRealmConfiguration);
-        realm.beginTransaction();
-        RealmResults<Movie> result = realm.where(Movie.class).findAll();
-        result.deleteAllFromRealm();
-        realm.commitTransaction();
+        realm.executeTransaction(realm1 -> {
+            RealmResults<Movie> result = realm1.where(Movie.class).findAll();
+            result.deleteAllFromRealm();
+        });
         realm.close();
     }
 }

@@ -16,16 +16,15 @@ import rx.schedulers.Schedulers;
  */
 
 public class DetailPresenter extends BasePresenter<DetailContract.View> implements DetailContract.Presenter {
-    //TODO datamanagerden alip , cachleyebilirsin Review ve Trailer icin
-    private DataManager dataManager;
+    private DataManager mDatamanager;
 
     public DetailPresenter(DataManager dataManager) {
-        this.dataManager = dataManager;
+        this.mDatamanager = dataManager;
     }
 
     @Override
     public void getTrailersList(long movieId) {
-        addSubscription(dataManager.getMovieVideos(movieId)
+        addSubscription(mDatamanager.getMovieVideos(movieId)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Subscriber<List<Trailer>>() {
@@ -48,7 +47,7 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
 
     @Override
     public void getReviewsList(long movieId) {
-        addSubscription(dataManager.getMovieReviews(movieId)
+        addSubscription(mDatamanager.getMovieReviews(movieId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Review>>() {
