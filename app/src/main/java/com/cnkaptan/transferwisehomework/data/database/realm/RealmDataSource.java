@@ -43,20 +43,20 @@ public final class RealmDataSource implements DataSource {
     @Override
     public void saveMovie(Movie movie) {
         final Realm realm = Realm.getInstance(mRealmConfiguration);
-        realm.beginTransaction();
-        final Movie realmMovie = realm.createObject(Movie.class, UUID.randomUUID().toString());
-        realmMovie.setMovideId(movie.getMovideId());
-        realmMovie.setTitle(movie.getTitle());
-        realmMovie.setOriginalTitle(movie.getOriginalTitle());
-        realmMovie.setOverview(movie.getOverview());
-        realmMovie.setReleaseDate(movie.getReleaseDate());
-        realmMovie.setPosterPath(movie.getPosterPath());
-        realmMovie.setPopularity(movie.getPopularity());
-        realmMovie.setAverageVote(movie.getAverageVote());
-        realmMovie.setVoteCount(movie.getVoteCount());
-        realmMovie.setBackdropPath(movie.getBackdropPath());
-        realm.copyToRealmOrUpdate(realmMovie);
-        realm.commitTransaction();
+        realm.executeTransaction(transactionRealm -> {
+            final Movie realmMovie = realm.createObject(Movie.class, UUID.randomUUID().toString());
+            realmMovie.setMovideId(movie.getMovideId());
+            realmMovie.setTitle(movie.getTitle());
+            realmMovie.setOriginalTitle(movie.getOriginalTitle());
+            realmMovie.setOverview(movie.getOverview());
+            realmMovie.setReleaseDate(movie.getReleaseDate());
+            realmMovie.setPosterPath(movie.getPosterPath());
+            realmMovie.setPopularity(movie.getPopularity());
+            realmMovie.setAverageVote(movie.getAverageVote());
+            realmMovie.setVoteCount(movie.getVoteCount());
+            realmMovie.setBackdropPath(movie.getBackdropPath());
+            transactionRealm.copyToRealmOrUpdate(realmMovie);
+        });
         realm.close();
     }
 

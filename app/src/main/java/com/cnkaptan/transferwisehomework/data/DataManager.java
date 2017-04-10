@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.cnkaptan.transferwisehomework.data.api.MovieApi;
 import com.cnkaptan.transferwisehomework.data.database.realm.RealmDataSource;
-import com.cnkaptan.transferwisehomework.data.pojos.MovieResponse;
 import com.cnkaptan.transferwisehomework.data.pojos.Movie;
+import com.cnkaptan.transferwisehomework.data.pojos.MovieResponse;
 
 import java.util.List;
 
@@ -62,7 +62,8 @@ public class DataManager {
 
 
     public Observable<List<Movie>> getDatasFromLocal(){
-        return realmDataSource.getAllMovies().toList();
+        return Observable.concat(realmDataSource.getAllMovies().toList(),getMovies(null))
+                .filter(movies -> movies != null && movies.size()>0).first();
     }
 
 
