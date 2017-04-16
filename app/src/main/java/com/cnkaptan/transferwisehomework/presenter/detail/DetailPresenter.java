@@ -6,12 +6,13 @@ import com.cnkaptan.transferwisehomework.BasePresenter;
 import com.cnkaptan.transferwisehomework.data.DataManager;
 import com.cnkaptan.transferwisehomework.data.Review;
 import com.cnkaptan.transferwisehomework.data.Trailer;
+import com.cnkaptan.transferwisehomework.data.TrailerAndReviews;
 
 import java.util.List;
 
-import rx.Subscriber;
+import rx.Observable;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by cnkaptan on 10/04/2017.
@@ -26,11 +27,12 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
     }
 
     @Override
-    public void getTrailersList(long movieId) {
-        addSubscription(mDatamanager.getMovieVideos(movieId)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Subscriber<List<Trailer>>() {
+    public void getTrailerAndReviews(long movieId) {
+        final Observable<List<Trailer>> trailerListObservable = mDatamanager.getMovieVideos(movieId);
+        final Observable<List<Review>> reviewListObservable = mDatamanager.getMovieReviews(movieId);
+
+        addSubscription(Observable.zip(trailerListObservable, reviewListObservable, TrailerAndReviews::new)
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<TrailerAndReviews>() {
             @Override
             public void onCompleted() {
 
@@ -42,32 +44,9 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
             }
 
             @Override
-            public void onNext(List<Trailer> trailers) {
-                getView().initTrailersData(trailers);
+            public void onNext(TrailerAndReviews trailerAndReviews) {
+                getView().initTrailerAndReviews(trailerAndReviews);
             }
         }));
-    }
-
-    @Override
-    public void getReviewsList(long movieId) {
-        addSubscription(mDatamanager.getMovieReviews(movieId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Review>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getView().showError(e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(List<Review> reviews) {
-                        getView().initReviewsData(reviews);
-                    }
-                }));
     }
 }

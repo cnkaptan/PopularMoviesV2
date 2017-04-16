@@ -28,6 +28,7 @@ import com.cnkaptan.transferwisehomework.data.DataManager;
 import com.cnkaptan.transferwisehomework.data.Movie;
 import com.cnkaptan.transferwisehomework.data.Review;
 import com.cnkaptan.transferwisehomework.data.Trailer;
+import com.cnkaptan.transferwisehomework.data.TrailerAndReviews;
 import com.cnkaptan.transferwisehomework.presenter.detail.DetailContract;
 import com.cnkaptan.transferwisehomework.presenter.detail.DetailPresenter;
 import com.cnkaptan.transferwisehomework.util.Constants;
@@ -35,7 +36,6 @@ import com.cnkaptan.transferwisehomework.util.ItemOffsetDecoration;
 import com.cnkaptan.transferwisehomework.util.Utils;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -113,8 +113,7 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
         unbinder = ButterKnife.bind(this, view);
         presenter.attachView(this);
         initViews();
-        initVideosList();
-        initReviewsList();
+        initTrailerAndReviewsLists();
         setupCardsElevation();
         return view;
     }
@@ -188,26 +187,24 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
         }
     }
 
-    private void initVideosList() {
+    private void initTrailerAndReviewsLists(){
         videosAdapter = new MovieVideosAdapter(getContext());
         videosAdapter.setOnItemClickListener((itemView, position) -> onMovieVideoClicked(position));
         movieVideos.setAdapter(videosAdapter);
         movieVideos.setItemAnimator(new DefaultItemAnimator());
         movieVideos.addItemDecoration(new ItemOffsetDecoration(getActivity(), R.dimen.movie_item_offset));
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
+        LinearLayoutManager trailersLM = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false);
-        movieVideos.setLayoutManager(layoutManager);
-        presenter.getTrailersList(movie.getMovideId());
-    }
+        movieVideos.setLayoutManager(trailersLM);
 
-    private void initReviewsList() {
         reviewsAdapter = new MovieReviewsAdapter();
         reviewsAdapter.setOnItemClickListener((itemView, position) -> onMovieReviewClicked(position));
         movieReviews.setAdapter(reviewsAdapter);
         movieReviews.setItemAnimator(new DefaultItemAnimator());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        movieReviews.setLayoutManager(layoutManager);
-        presenter.getReviewsList(movie.getMovideId());
+        LinearLayoutManager reviewsLM = new LinearLayoutManager(getContext());
+        movieReviews.setLayoutManager(reviewsLM);
+
+        presenter.getTrailerAndReviews(movie.getMovideId());
     }
 
     private void onMovieReviewClicked(int position) {
@@ -239,17 +236,6 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
                 Utils.convertDpToPixel(getResources().getInteger(R.integer.movie_detail_content_elevation_in_dp),getContext().getResources()));
     }
 
-
-    @Override
-    public void initTrailersData(List<Trailer> trailers) {
-        videosAdapter.setMovieVideos(trailers);
-    }
-
-    @Override
-    public void initReviewsData(List<Review> reviews) {
-        reviewsAdapter.setMovieReviews(reviews);
-    }
-
     @Override
     public void showError(String message) {
         AlertDialog dialog = new AlertDialog.Builder(getContext())
@@ -259,5 +245,11 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
                 .setCancelable(false)
                 .create();
         dialog.show();
+    }
+
+    @Override
+    public void initTrailerAndReviews(TrailerAndReviews trailerAndReviews) {
+        videosAdapter.setMovieVideos(trailerAndReviews.getTrailers());
+        reviewsAdapter.setMovieReviews(trailerAndReviews.getReviews());
     }
 }
