@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.data;
+package com.cnkaptan.transferwisehomework.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -30,6 +30,10 @@ public class Trailer implements Parcelable {
     private int size;
     @SerializedName("type")
     private String type;
+
+    public Trailer(String name) {
+        this.name = name;
+    }
 
     public String getVideoId() {
         return videoId;

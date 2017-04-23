@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cnkaptan.transferwisehomework.R;
-import com.cnkaptan.transferwisehomework.data.Trailer;
+import com.cnkaptan.transferwisehomework.model.Trailer;
 import com.cnkaptan.transferwisehomework.util.OnItemClickListener;
 
 import java.util.ArrayList;

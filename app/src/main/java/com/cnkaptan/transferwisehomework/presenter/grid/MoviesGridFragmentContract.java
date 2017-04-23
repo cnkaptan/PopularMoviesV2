@@ -2,7 +2,7 @@ package com.cnkaptan.transferwisehomework.presenter.grid;
 
 import com.cnkaptan.transferwisehomework.MvpPresenter;
 import com.cnkaptan.transferwisehomework.MvpView;
-import com.cnkaptan.transferwisehomework.data.Movie;
+import com.cnkaptan.transferwisehomework.model.Movie;
 
 import java.util.List;
 

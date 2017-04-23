@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.data;
+package com.cnkaptan.transferwisehomework.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -21,6 +21,11 @@ public class Review implements Parcelable {
 
     @SerializedName("content")
     private String content;
+
+    public Review(String author, String reviewUrl) {
+        this.author = author;
+        this.reviewUrl = reviewUrl;
+    }
 
     public String getReviewId() {
         return reviewId;

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cnkaptan.transferwisehomework.R;
-import com.cnkaptan.transferwisehomework.data.Review;
+import com.cnkaptan.transferwisehomework.model.Review;
 import com.cnkaptan.transferwisehomework.util.OnItemClickListener;
 
 import java.util.ArrayList;

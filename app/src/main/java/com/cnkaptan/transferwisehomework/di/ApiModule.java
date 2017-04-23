@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.cnkaptan.transferwisehomework.AppModule;
 import com.cnkaptan.transferwisehomework.BuildConfig;
-import com.cnkaptan.transferwisehomework.data.DataManager;
+import com.cnkaptan.transferwisehomework.data.DataManagerImpl;
 import com.cnkaptan.transferwisehomework.data.api.AuthorizationInterceptor;
 import com.cnkaptan.transferwisehomework.data.api.MovieApi;
 import com.cnkaptan.transferwisehomework.data.database.realm.RealmDataSource;
@@ -116,7 +116,7 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    DataManager provideDataManager(MovieApi movieApi, RealmDataSource realmDataSource){
-        return new DataManager(movieApi,realmDataSource);
+    DataManagerImpl provideDataManager(MovieApi movieApi, RealmDataSource realmDataSource){
+        return new DataManagerImpl(movieApi,realmDataSource);
     }
 }

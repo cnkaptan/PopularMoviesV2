@@ -1,9 +1,9 @@
 package com.cnkaptan.transferwisehomework.data.api;
 
-import com.cnkaptan.transferwisehomework.data.MovieResponse;
-import com.cnkaptan.transferwisehomework.data.Movie;
-import com.cnkaptan.transferwisehomework.data.ReviewResponse;
-import com.cnkaptan.transferwisehomework.data.TrailerResponse;
+import com.cnkaptan.transferwisehomework.model.MovieResponse;
+import com.cnkaptan.transferwisehomework.model.Movie;
+import com.cnkaptan.transferwisehomework.model.ReviewResponse;
+import com.cnkaptan.transferwisehomework.model.TrailerResponse;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;

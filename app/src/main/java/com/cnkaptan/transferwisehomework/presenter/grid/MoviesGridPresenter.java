@@ -4,13 +4,12 @@ import android.support.annotation.NonNull;
 
 import com.cnkaptan.transferwisehomework.BasePresenter;
 import com.cnkaptan.transferwisehomework.data.DataManager;
-import com.cnkaptan.transferwisehomework.data.Movie;
+import com.cnkaptan.transferwisehomework.model.Movie;
 
 import java.util.List;
 
+import rx.Scheduler;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by cnkaptan on 10/04/2017.
@@ -19,21 +18,24 @@ import rx.schedulers.Schedulers;
 public class MoviesGridPresenter extends BasePresenter<MoviesGridFragmentContract.View> implements MoviesGridFragmentContract.Presenter {
 
     @NonNull
-    final private DataManager dataManager;
-
-    public MoviesGridPresenter(@NonNull DataManager dataManager) {
-        this.dataManager = dataManager;
+    final private DataManager dataManagerImpl;
+    @NonNull
+    private final Scheduler mainScheduler, ioScheduler;
+    public MoviesGridPresenter(@NonNull DataManager dataManagerImpl, Scheduler ioScheduler, Scheduler mainScheduler) {
+        this.dataManagerImpl = dataManagerImpl;
+        this.ioScheduler = ioScheduler;
+        this.mainScheduler = mainScheduler;
     }
 
     @Override
     public void getDatasFromLocal() {
+        checkViewAttached();
         getView().showRefresh();
-        addSubscription(dataManager.getDatasFromLocal().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        addSubscription(dataManagerImpl.getDatasFromLocal().subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
                 .subscribe(new Subscriber<List<Movie>>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
@@ -52,9 +54,10 @@ public class MoviesGridPresenter extends BasePresenter<MoviesGridFragmentContrac
 
     @Override
     public void refreshMovies() {
+        checkViewAttached();
         getView().showRefresh();
-        addSubscription(dataManager.getMovies(null).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        addSubscription(dataManagerImpl.getMovies(null).subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
                 .subscribe(new Subscriber<List<Movie>>() {
                     @Override
                     public void onCompleted() {
@@ -78,9 +81,10 @@ public class MoviesGridPresenter extends BasePresenter<MoviesGridFragmentContrac
 
     @Override
     public void loadMoreMovies() {
+        checkViewAttached();
         getView().showLoading();
-        addSubscription(dataManager.loadMoreMovies().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        addSubscription(dataManagerImpl.loadMoreMovies().subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
                 .subscribe(new Subscriber<List<Movie>>() {
                     @Override
                     public void onCompleted() {

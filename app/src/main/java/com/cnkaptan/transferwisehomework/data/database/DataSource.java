@@ -1,6 +1,8 @@
 package com.cnkaptan.transferwisehomework.data.database;
 
-import com.cnkaptan.transferwisehomework.data.Movie;
+import com.cnkaptan.transferwisehomework.model.Movie;
+
+import java.util.List;
 
 import rx.Observable;
 
@@ -12,7 +14,11 @@ public interface DataSource {
 
     void saveMovie(Movie movie);
 
-    Observable<Movie> getAllMovies();
+    List<Movie> getAllMovies();
+
+    Observable<Movie> getAllMoviesObserVable();
 
     void clearMovies();
+
+    int getCurrentPage();
 }

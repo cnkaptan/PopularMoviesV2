@@ -24,11 +24,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cnkaptan.transferwisehomework.MovieApplication;
 import com.cnkaptan.transferwisehomework.R;
-import com.cnkaptan.transferwisehomework.data.DataManager;
-import com.cnkaptan.transferwisehomework.data.Movie;
-import com.cnkaptan.transferwisehomework.data.Review;
-import com.cnkaptan.transferwisehomework.data.Trailer;
-import com.cnkaptan.transferwisehomework.data.TrailerAndReviews;
+import com.cnkaptan.transferwisehomework.data.DataManagerImpl;
+import com.cnkaptan.transferwisehomework.model.Movie;
+import com.cnkaptan.transferwisehomework.model.Review;
+import com.cnkaptan.transferwisehomework.model.Trailer;
+import com.cnkaptan.transferwisehomework.model.TrailerAndReviews;
 import com.cnkaptan.transferwisehomework.presenter.detail.DetailContract;
 import com.cnkaptan.transferwisehomework.presenter.detail.DetailPresenter;
 import com.cnkaptan.transferwisehomework.util.Constants;
@@ -43,6 +43,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class MovieDetailFragment extends Fragment implements DetailContract.View{
@@ -86,7 +88,7 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
     private MovieReviewsAdapter reviewsAdapter;
     private DetailContract.Presenter presenter;
     @Inject
-    DataManager dataManager;
+    DataManagerImpl dataManagerImpl;
 
     public static MovieDetailFragment newInstance(Movie movie) {
         MovieDetailFragment fragment = new MovieDetailFragment();
@@ -122,7 +124,7 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
     public void onAttach(Context context) {
         super.onAttach(context);
         ((MovieApplication)context.getApplicationContext()).getApiComponent().inject(this);
-        presenter = new DetailPresenter(dataManager);
+        presenter = new DetailPresenter(dataManagerImpl, Schedulers.io(), AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -204,7 +206,7 @@ public class MovieDetailFragment extends Fragment implements DetailContract.View
         LinearLayoutManager reviewsLM = new LinearLayoutManager(getContext());
         movieReviews.setLayoutManager(reviewsLM);
 
-        presenter.getTrailerAndReviews(movie.getMovideId());
+        presenter.getTrailerAndReviews(movie.getMovieId());
     }
 
     private void onMovieReviewClicked(int position) {

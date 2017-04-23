@@ -18,8 +18,8 @@ import android.widget.RelativeLayout;
 
 import com.cnkaptan.transferwisehomework.MovieApplication;
 import com.cnkaptan.transferwisehomework.R;
-import com.cnkaptan.transferwisehomework.data.DataManager;
-import com.cnkaptan.transferwisehomework.data.Movie;
+import com.cnkaptan.transferwisehomework.data.DataManagerImpl;
+import com.cnkaptan.transferwisehomework.model.Movie;
 import com.cnkaptan.transferwisehomework.presenter.grid.MoviesGridFragmentContract;
 import com.cnkaptan.transferwisehomework.presenter.grid.MoviesGridPresenter;
 import com.cnkaptan.transferwisehomework.util.EndlessRecyclerViewOnScrollListener;
@@ -35,6 +35,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MoviesGridFragment extends Fragment implements OnItemClickListener, MoviesGridFragmentContract.View
         , SwipeRefreshLayout.OnRefreshListener {
@@ -50,7 +52,7 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
     MoviesAdapter adapter;
 
     @Inject
-    DataManager dataManager;
+    DataManagerImpl dataManagerImpl;
     MoviesGridFragmentContract.Presenter presenter;
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout swipeLayout;
@@ -94,7 +96,7 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
         ((MovieApplication) getActivity().getApplicationContext()).getApiComponent().inject(this);
         initMoviesGrid();
         initSwipeRefreshLayout();
-        presenter = new MoviesGridPresenter(dataManager);
+        presenter = new MoviesGridPresenter(dataManagerImpl, Schedulers.io(), AndroidSchedulers.mainThread());
         presenter.attachView(this);
         presenter.getDatasFromLocal();
         return view;
@@ -158,6 +160,7 @@ public class MoviesGridFragment extends Fragment implements OnItemClickListener,
 
     @Override
     public void onError(String message) {
+        endlessRecyclerViewOnScrollListener.setLoading(false);
         Snackbar.make(swipeLayout, R.string.error_failed_to_update_movies,
                 Snackbar.LENGTH_LONG)
                 .show();

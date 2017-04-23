@@ -4,10 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.cnkaptan.transferwisehomework.data.database.DataSource;
-import com.cnkaptan.transferwisehomework.data.Movie;
+import com.cnkaptan.transferwisehomework.model.Movie;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Singleton;
 
@@ -20,14 +19,14 @@ import rx.Observable;
  * Created by cnkaptan on 09/04/2017.
  */
 @Singleton
-public final class RealmDataSource implements DataSource {
+public class RealmDataSource implements DataSource {
     @NonNull
     private Context mContext;
     @NonNull
     private RealmConfiguration mRealmConfiguration;
     private static final int PAGE_SIZE = 20;
-    private RealmDataSource(){
-        // Empty private Constructor
+
+    public RealmDataSource() {
     }
 
     public RealmDataSource(@NonNull Context context) {
@@ -36,15 +35,16 @@ public final class RealmDataSource implements DataSource {
         this.mRealmConfiguration = new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build();
+        Realm.setDefaultConfiguration(mRealmConfiguration);
     }
 
 
     @Override
     public void saveMovie(Movie movie) {
-        final Realm realm = Realm.getInstance(mRealmConfiguration);
+        final Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(transactionRealm -> {
-            final Movie realmMovie = realm.createObject(Movie.class, UUID.randomUUID().toString());
-            realmMovie.setMovideId(movie.getMovideId());
+            final Movie realmMovie = realm.createObject(Movie.class, movie.getId());
+            realmMovie.setMovieId(movie.getMovieId());
             realmMovie.setTitle(movie.getTitle());
             realmMovie.setOriginalTitle(movie.getOriginalTitle());
             realmMovie.setOverview(movie.getOverview());
@@ -60,20 +60,20 @@ public final class RealmDataSource implements DataSource {
     }
 
     @Override
-    public Observable<Movie> getAllMovies() {
-        final Realm realm = Realm.getInstance(mRealmConfiguration);
-        final RealmResults<Movie> realmResults = realm.where(Movie.class)
-                .findAll();
-        List<Movie> allMovies = realm.copyFromRealm(realmResults);
+    public List<Movie> getAllMovies() {
+        final Realm realm = Realm.getDefaultInstance();
+        List<Movie> allMovies = realm.copyFromRealm(realm.where(Movie.class).findAll());
         realm.close();
-        return Observable.from(allMovies);
+        return allMovies;
+    }
+
+    @Override
+    public Observable<Movie> getAllMoviesObserVable() {
+        return Observable.from(getAllMovies());
     }
 
     public int getCurrentPage() {
-        final Realm realm = Realm.getInstance(mRealmConfiguration);
-        final RealmResults<Movie> realmResults = realm.where(Movie.class).findAll();
-        List<Movie> allMovies = realm.copyFromRealm(realmResults);
-        realm.close();
+        List<Movie> allMovies = getAllMovies();
         int currentPage = 1;
         if (allMovies != null) {
             currentPage = allMovies.size() / PAGE_SIZE + 1;
@@ -83,9 +83,9 @@ public final class RealmDataSource implements DataSource {
 
     @Override
     public void clearMovies() {
-        final Realm realm = Realm.getInstance(mRealmConfiguration);
-        realm.executeTransaction(realm1 -> {
-            RealmResults<Movie> result = realm1.where(Movie.class).findAll();
+        final Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(transactionRealm -> {
+            RealmResults<Movie> result = transactionRealm.where(Movie.class).findAll();
             result.deleteAllFromRealm();
         });
         realm.close();

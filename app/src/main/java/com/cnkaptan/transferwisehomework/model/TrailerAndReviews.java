@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.data;
+package com.cnkaptan.transferwisehomework.model;
 
 import java.util.List;
 

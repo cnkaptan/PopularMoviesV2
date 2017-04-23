@@ -1,4 +1,4 @@
-package com.cnkaptan.transferwisehomework.data;
+package com.cnkaptan.transferwisehomework.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -19,7 +19,7 @@ public class Movie extends RealmObject implements Parcelable {
     private String id;
 
     @SerializedName("id")
-    private long movideId;
+    private long movieId;
 
     @SerializedName("original_title")
     private String originalTitle;
@@ -48,6 +48,29 @@ public class Movie extends RealmObject implements Parcelable {
     @SerializedName("backdrop_path")
     private String backdropPath;
 
+    public Movie(long movieId, String title, String overview, double popularity, double averageVote) {
+        this.movieId = movieId;
+        this.title = title;
+        this.overview = overview;
+        this.popularity = popularity;
+        this.averageVote = averageVote;
+    }
+
+    public Movie(long movieId, String originalTitle, String overview, String releaseDate, String posterPath,
+                 double popularity, String title, double averageVote, long voteCount, String backdropPath) {
+        this.movieId = movieId;
+        this.originalTitle = originalTitle;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.posterPath = posterPath;
+        this.popularity = popularity;
+        this.title = title;
+        this.averageVote = averageVote;
+        this.voteCount = voteCount;
+        this.backdropPath = backdropPath;
+    }
+
+
     public String getId() {
         return id;
     }
@@ -56,12 +79,12 @@ public class Movie extends RealmObject implements Parcelable {
         this.id = id;
     }
 
-    public long getMovideId() {
-        return movideId;
+    public long getMovieId() {
+        return movieId;
     }
 
-    public void setMovideId(long movideId) {
-        this.movideId = movideId;
+    public void setMovieId(long movieId) {
+        this.movieId = movieId;
     }
 
     public String getOriginalTitle() {
@@ -137,7 +160,7 @@ public class Movie extends RealmObject implements Parcelable {
     }
     @Override
     public String toString() {
-        return "[" + this.movideId + ", " + this.title + "]";
+        return "[" + this.movieId + ", " + this.title + "]";
     }
     @Override
     @SuppressWarnings("PMD")
@@ -147,7 +170,7 @@ public class Movie extends RealmObject implements Parcelable {
 
         Movie movie = (Movie) o;
 
-        if (movideId != movie.movideId) return false;
+        if (movieId != movie.movieId) return false;
         if (Double.compare(movie.popularity, popularity) != 0) return false;
         if (Double.compare(movie.averageVote, averageVote) != 0) return false;
         if (voteCount != movie.voteCount) return false;
@@ -166,7 +189,7 @@ public class Movie extends RealmObject implements Parcelable {
     public int hashCode() {
         int result;
         long temp;
-        result = (int) (movideId ^ (movideId >>> 32));
+        result = (int) (movieId ^ (movieId >>> 32));
         result = 31 * result + (originalTitle != null ? originalTitle.hashCode() : 0);
         result = 31 * result + (overview != null ? overview.hashCode() : 0);
         result = 31 * result + (releaseDate != null ? releaseDate.hashCode() : 0);
@@ -188,7 +211,7 @@ public class Movie extends RealmObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.movideId);
+        dest.writeLong(this.movieId);
         dest.writeString(this.originalTitle);
         dest.writeString(this.overview);
         dest.writeString(this.releaseDate);
@@ -204,7 +227,7 @@ public class Movie extends RealmObject implements Parcelable {
     }
 
     protected Movie(Parcel in) {
-        this.movideId = in.readLong();
+        this.movieId = in.readLong();
         this.originalTitle = in.readString();
         this.overview = in.readString();
         this.releaseDate = in.readString();
@@ -227,4 +250,7 @@ public class Movie extends RealmObject implements Parcelable {
             return new Movie[size];
         }
     };
+
+
+
 }

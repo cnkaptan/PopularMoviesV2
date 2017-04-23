@@ -37,4 +37,16 @@ public class BasePresenter<T extends MvpView> implements MvpPresenter<T> {
     public void addSubscription(Subscription subscription) {
         compositeSubscription.add(subscription);
     }
+
+    public void checkViewAttached() {
+        if (!isViewAttached()) {
+            throw new MvpViewNotAttachedException();
+        }
+    }
+
+    public static class MvpViewNotAttachedException extends RuntimeException {
+        public MvpViewNotAttachedException() {
+            super("Please call Presenter.attachView(MvpView) before" + " requesting data to the Presenter");
+        }
+    }
 }

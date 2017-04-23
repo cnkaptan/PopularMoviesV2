@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ScrollView;
 
 import com.cnkaptan.transferwisehomework.R;
-import com.cnkaptan.transferwisehomework.data.Movie;
+import com.cnkaptan.transferwisehomework.model.Movie;
 import com.cnkaptan.transferwisehomework.ui.detail.MovieDetailActivity;
 import com.cnkaptan.transferwisehomework.ui.detail.MovieDetailFragment;
 import com.cnkaptan.transferwisehomework.util.OnItemSelectedListener;
