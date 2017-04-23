@@ -57,6 +57,7 @@ public class RealmDataSourceTest {
         mockStatic(RealmLog.class);
         mockStatic(Realm.class);
         mockStatic(RealmResults.class);
+        mockStatic(RealmQuery.class);
         Realm mockRealm = PowerMockito.mock(Realm.class);
 
         when(Realm.getDefaultInstance()).thenReturn(mockRealm);
@@ -64,6 +65,8 @@ public class RealmDataSourceTest {
         this.mockRealm = mockRealm;
         realmDataSource = new RealmDataSource();
 
+        RealmQuery<Movie> mockMovieListQuery = mockRealmQuery();
+        when(mockRealm.where(Movie.class)).thenReturn(mockMovieListQuery);
     }
 
     @Test
@@ -121,11 +124,8 @@ public class RealmDataSourceTest {
 
     @Test
     public void testgettingAllMovies() throws Exception {
-        mockStatic(RealmQuery.class);
         List<Movie> dummyMovieList = getDummyMovieList();
-        RealmQuery<Movie> mockMovieListQuery = mockRealmQuery();
         RealmResults<Movie> mockMovieListResult = mockRealmResults();
-        when(mockRealm.where(Movie.class)).thenReturn(mockMovieListQuery);
         when(mockRealm.where(Movie.class).findAll()).thenReturn(mockMovieListResult);
         when(mockRealm.copyFromRealm(mockMovieListResult)).thenReturn(dummyMovieList);
 
@@ -137,11 +137,8 @@ public class RealmDataSourceTest {
 
     @Test
     public void testGettingCurrentPage() throws Exception {
-        mockStatic(RealmQuery.class);
         List<Movie> dummyMovieList = getDummyMovieList();
-        RealmQuery<Movie> mockMovieListQuery = mockRealmQuery();
         RealmResults<Movie> mockMovieListResult = mockRealmResults();
-        when(mockRealm.where(Movie.class)).thenReturn(mockMovieListQuery);
         when(mockRealm.where(Movie.class).findAll()).thenReturn(mockMovieListResult);
         when(mockRealm.copyFromRealm(mockMovieListResult)).thenReturn(dummyMovieList);
 
@@ -153,9 +150,6 @@ public class RealmDataSourceTest {
 
     @Test
     public void testGettingCurrentPageWithNullMovieList() throws Exception {
-        mockStatic(RealmQuery.class);
-        RealmQuery<Movie> mockMovieListQuery = mockRealmQuery();
-        when(mockRealm.where(Movie.class)).thenReturn(mockMovieListQuery);
         RealmResults<Movie> mockMovieListResult = mockRealmResults();
         when(mockRealm.where(Movie.class).findAll()).thenReturn(mockMovieListResult);
         when(mockRealm.copyFromRealm(mockMovieListResult)).thenReturn(null);
